@@ -4,3 +4,15 @@
 __pycache__/
 .ipynb_checkpoints/
 *.pyc
+
+# Archivos temporales de Quarto y LaTeX
+Informe_TP1.tex
+Informe_TP1.log
+Informe_TP1.aux
+Informe_TP1.out
+Informe_TP1.toc
+Informe_TP1_files/
+
+/.quarto/
+**/*.quarto_ipynb
+output/pdf/resultados/

@@ -5,3 +5,6 @@
 *.pdf binary
 *.png binary
 *.tif binary
+*.qmd text eol=lf
+*.yml text eol=lf
+*.tex text eol=lf

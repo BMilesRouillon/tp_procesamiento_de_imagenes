@@ -1,0 +1,37 @@
+project:
+  type: default
+  output-dir: output/pdf
+  render:
+    - Informe_TP1.qmd
+
+lang: es
+
+format:
+  pdf:
+    documentclass: scrartcl
+    pdf-engine: lualatex
+    papersize: a4
+    fontsize: 11pt
+    mainfont: Latin Modern Roman
+    sansfont: Latin Modern Sans
+    monofont: Latin Modern Mono
+    geometry:
+      - top=22mm
+      - bottom=22mm
+      - left=22mm
+      - right=22mm
+      - headsep=7mm
+    linestretch: 1.04
+    number-sections: true
+    toc: false
+    colorlinks: false
+    fig-pos: H
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    include-in-header: informe/preambulo.tex
+
+crossref:
+  fig-title: Figura
+  tbl-title: Tabla
+  fig-prefix: figura
+  tbl-prefix: tabla

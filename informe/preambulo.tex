@@ -1,0 +1,33 @@
+% Presentación del informe. El procesamiento se encuentra en los scripts .py.
+\usepackage{microtype}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+\ihead{\small Procesamiento de Imágenes}
+\ohead{\small TP1 -- 2026}
+\cfoot*{\pagemark}
+\setkomafont{pageheadfoot}{\normalfont\small}
+\setkomafont{disposition}{\normalfont\bfseries}
+\setkomafont{caption}{\small}
+\setkomafont{captionlabel}{\small\bfseries}
+\setkomafont{title}{\normalfont\bfseries\LARGE}
+\setkomafont{subtitle}{\normalfont\large}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\intextsep}{6pt plus 1pt minus 1pt}
+\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{5pt}
+\setlength{\belowcaptionskip}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\emergencystretch=1.5em
+
+\usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{\small\setlength{\tabcolsep}{4pt}}
+
+\setlength{\LTpre}{5pt}
+\setlength{\LTpost}{5pt}
+\AtBeginDocument{\setlength{\abovedisplayskip}{8pt}\setlength{\belowdisplayskip}{8pt}}

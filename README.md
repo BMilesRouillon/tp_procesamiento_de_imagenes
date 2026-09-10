@@ -16,6 +16,9 @@ requirements.txt             Bibliotecas necesarias
 README.md                    Instrucciones de ejecución
 Consignas/                   Enunciado original e imágenes de entrada
 resultados/                  Figuras y composición de nombres
+Informe_TP1.qmd              Fuente editable del informe
+_quarto.yml                  Configuración de Quarto y salida PDF
+informe/preambulo.tex         Formato tipográfico en LaTeX
 output/pdf/Informe_TP1.pdf    Informe de la resolución
 ```
 
@@ -151,6 +154,39 @@ Comprobaciones de ecualización: OK
 Los tres scripts finalizan sin requerir interacción. Las figuras se guardan en
 `resultados/` para abrirlas después; al volver a ejecutar los scripts se reemplazan
 sus salidas. Los archivos de entrada se conservan.
+
+## Regenerar el informe PDF
+
+El informe se escribe en **[Informe_TP1.qmd](Informe_TP1.qmd)** y se compila con
+**Quarto y LuaLaTeX**. Su estilo se configura en `_quarto.yml` y
+`informe/preambulo.tex`. El QMD contiene el texto y las referencias a las figuras;
+el procesamiento de imágenes sigue en los scripts `.py`.
+
+Instalar [Quarto](https://quarto.org/docs/get-started/) y, una sola vez, su distribución
+LaTeX con el comando oficial:
+
+```text
+quarto install tinytex
+```
+
+Desde la raíz del repositorio, después de ejecutar los dos scripts de resolución:
+
+```text
+quarto render
+```
+
+El resultado reemplaza `output/pdf/Informe_TP1.pdf`. No se requiere Jupyter, R ni
+un servicio en línea para compilar el informe. La primera instalación de LaTeX y
+los paquetes que falten sí requiere conexión a Internet. La configuración del
+motor se describe en la [documentación de Quarto](https://quarto.org/docs/output-formats/pdf-engine).
+
+En esta computadora Quarto está instalado en
+`%LOCALAPPDATA%\Programs\Quarto\bin`. Si una terminal que ya estaba abierta no
+reconoce el comando, abrir una nueva o ejecutar en PowerShell:
+
+```powershell
+& "$env:LOCALAPPDATA\Programs\Quarto\bin\quarto.cmd" render
+```
 
 ## Resultados
 
