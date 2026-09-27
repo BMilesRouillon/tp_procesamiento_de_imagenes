@@ -232,43 +232,55 @@ def obtener_respuesta(cuadrante):
     horizontal.
 
     El proceso es:
-        1. Ubicar esa línea horizontal con `detectar_linea_respuesta`.
+        1. Ubicar la línea horizontal con `detectar_linea_respuesta`.
         2. Recortar la región por encima de la línea.
-        3. Verificar si hay pixeles negros en el 30% inferior de esa región (si no
-           la hay, no se respondió esa pregunta).
-        4. Agrupar las filas con pixeles negros en renglones (con `agrupar_indices`)
-           y quedarse con el último renglón, que es la respuesta marcada.
-        5. Recortar esa respuesta a su contenido con `recortar_respuesta`.
+        3. Verificar si hay píxeles negros en el 30% inferior de esa región.
+        4. Detectar los renglones que contienen tinta y quedarse con el último.
+        5. Analizar las columnas del renglón seleccionado para detectar cuántas
+           opciones fueron marcadas.
+        6. Si hay más de una opción marcada, devolver None.
+        7. Recortar la respuesta marcada.
     """
+
     linea = detectar_linea_respuesta(cuadrante)
+
     if linea is None:
         return None
 
     x, y, w, h = linea
 
-    # 1. Región de opciones sobre la línea
+    # Región de opciones sobre la línea
     region_opciones = cuadrante[0:y, x : x + w]
 
     if region_opciones.size == 0:
         return None
 
     # Binarización
-    _, binaria = cv2.threshold(region_opciones, 200, 255, cv2.THRESH_BINARY)
+    _, binaria = cv2.threshold(
+        region_opciones,
+        200,
+        255,
+        cv2.THRESH_BINARY
+    )
 
     # ----------------------------------------------------
     # PASO 1: Evaluar el 30% inferior de filas
     # ----------------------------------------------------
-    alto_30 = max(1, int(region_opciones.shape[0] * 0.30))
+    alto_30 = max(
+        1,
+        int(region_opciones.shape[0] * 0.30)
+    )
+
     filas_30_inferior = binaria[-alto_30:, :]
 
     hay_tinta_abajo = np.any(filas_30_inferior == 0)
 
-    # Si no hay ni un solo píxel negro en el 30% inferior, no hay respuesta
+    # Si no hay ningún píxel negro, no hay respuesta
     if not hay_tinta_abajo:
         return None
 
     # ----------------------------------------------------
-    # PASO 2: Contar renglones y tomar el último
+    # PASO 2: Detectar renglones con tinta
     # ----------------------------------------------------
     proyeccion_y = np.any(binaria == 0, axis=1)
     indices_negros = np.where(proyeccion_y)[0]
@@ -281,8 +293,43 @@ def obtener_respuesta(cuadrante):
     # Tomar el último renglón
     y_inicio, y_fin = grupos_renglones[-1]
 
-    # Extraer y recortar respuesta
-    respuesta = region_opciones[y_inicio : y_fin + 1, :]
+    # Extraer el renglón de la respuesta
+    respuesta = region_opciones[
+        y_inicio : y_fin + 1,
+        :
+    ]
+
+    # ----------------------------------------------------
+    # PASO 3: Detectar cuántas opciones fueron marcadas
+    # ----------------------------------------------------
+    _, binaria_respuesta = cv2.threshold(
+        respuesta,
+        200,
+        255,
+        cv2.THRESH_BINARY
+    )
+
+    # Para cada columna:
+    # True  -> hay al menos un píxel negro
+    # False -> no hay ningún píxel negro
+    proyeccion_x = np.any(
+        binaria_respuesta == 0,
+        axis=0
+    )
+
+    indices_negros_x = np.where(proyeccion_x)[0]
+
+    # Agrupar columnas consecutivas con tinta.
+    # Cada grupo representa una opción marcada.
+    grupos_opciones = agrupar_indices(indices_negros_x)
+
+    # Si hay más de una opción marcada, la respuesta es inválida
+    if len(grupos_opciones) > 1:
+        return None
+
+    # ----------------------------------------------------
+    # PASO 4: Recortar la respuesta
+    # ----------------------------------------------------
     return recortar_respuesta(respuesta)
 
 
